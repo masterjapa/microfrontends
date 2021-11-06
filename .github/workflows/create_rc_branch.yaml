@@ -14,7 +14,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   CreateCandidateBranch:
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && ${{ contains(github.ref, 'refs/heads/revert') == false }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -33,8 +33,7 @@ jobs:
       - name: Create RC Pull Request
         uses: repo-sync/pull-request@v2
         with:
-          source_branch: "release-candidate/${{ github.event.number }"
-          destination_branch: "master"
+          source_branch: release-candidate/${{ github.event.number }}
           github_token: ${{ secrets.PAT }}
-          pr_label: "RC-${{ github.event.number }}"
-          pr_title: "RC-${{ github.event.number }}"
+          pr_label: RC-${{ github.event.number }}
+          pr_title: RC-${{ github.event.number }}
