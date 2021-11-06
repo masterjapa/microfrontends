@@ -27,4 +27,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
+          branch:
+            release-candidate/${{ github.event.number }}
+
+            # Make changes to pull request here
+      - name: Create RC Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.PAT }}
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          commit-message: Release candidate ${{ github.event.number }}
+          title: RC-${{ github.event.number }}
+          labels: RC-${{ github.event.number }}, release-candidate
           branch: release-candidate/${{ github.event.number }}
+          base: master
