@@ -6,26 +6,22 @@ name: CI - RC
 on:
   # Triggers only when a PR is open on hmg
   pull_request:
-    types: [ opened, synchronize ]
-    branches: [ hmg ]
+    branches: [hmg]
+    types: [opened, synchronize]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  create-candidate:
-    # The type of runner that the job will run on
+  createCandidate:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       # Make changes to pull request here
-
       - name: Create Release Candidate
+        id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
+          base: ${{ github.head_ref }}
           commit-message: Release candidate {{ steps.cpr.outputs.pull-request-number }}
           title: RC-${{ steps.cpr.outputs.pull-request-number }}
           labels: RC
