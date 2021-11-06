@@ -6,8 +6,10 @@ name: CI - RC
 on:
   # Triggers only when a PR is open on hmg
   pull_request:
-    branches: [hmg]
+    branches:
+      - hmg
     types: [opened, synchronize]
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
