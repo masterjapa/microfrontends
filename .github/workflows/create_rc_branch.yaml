@@ -13,7 +13,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  createCandidate:
+  CreateCandidateBranch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -25,16 +25,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
-          branch: release-candidate/${{ github.event.number }}
-
-      # Make changes to pull request here
-      - name: Create Release Candidate
-        id: cpr
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.PAT }}
-          base: ${{ github.head_ref }}
-          commit-message: Release candidate ${{ github.event.number }}
-          title: RC-${{ steps.cpr.outputs.pull-request-number }}
-          labels: RC
           branch: release-candidate/${{ github.event.number }}
