@@ -30,4 +30,4 @@ yarn lint
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-### testing CI v.21
+### testing CI v.22
