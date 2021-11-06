@@ -33,3 +33,4 @@ jobs:
           title: RC-${{ steps.extract_branch.outputs.branch }}
           labels: RC-${{ steps.extract_branch.outputs.branch }}, release-candidate
           branch: ${{ steps.extract_branch.outputs.branch }}
+          base: master
