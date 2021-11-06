@@ -32,4 +32,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### simbora
 
-### testing CI v.45
+### testing CI v.42
