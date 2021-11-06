@@ -43,7 +43,7 @@ export default {
       if (!this.reactRender) return;
       this.reactRender(
         this.createElement(this.reactComponent, {
-          text: "React component renderizado no shell",
+          text: "Trocar o titulo",
           onClick: () => this.title = "Mudei o titulo via componente react"
         }),
         this.$refs.react
