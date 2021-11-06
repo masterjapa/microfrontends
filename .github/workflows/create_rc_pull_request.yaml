@@ -1,0 +1,36 @@
+# This is a basic workflow to help you get started with Actions
+
+name: RC Create Pull Request
+
+# Controls when the workflow will run
+on:
+  # Triggers only when a PR is open on hmg
+  push:
+    branches:
+      - "release-candidate/**"
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  CreateCandidatePR:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      # Make changes to pull request here
+      - name: Create RC Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.PAT }}
+          commit-message: Release candidate ${{ steps.extract_branch.outputs.branch }}
+          title: RC-${{ steps.extract_branch.outputs.branch }}
+          labels: RC-${{ steps.extract_branch.outputs.branch }}, release-candidate
+          branch: ${{ steps.extract_branch.outputs.branch }}
+          base: master
