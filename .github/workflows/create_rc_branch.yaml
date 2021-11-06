@@ -6,7 +6,8 @@ name: RC Create Branch
 on:
   # Triggers only when a PR is open on hmg
   pull_request:
-    branches: [hmg]
+    branches:
+      - hmg
     types: [closed]
   workflow_dispatch:
 
