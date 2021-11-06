@@ -34,7 +34,7 @@ jobs:
       - name: Create RC Pull Request
         uses: repo-sync/pull-request@v2
         with:
-          source_branch: release-candidate/${{ github.event.number }
+          source_branch: "release-candidate/${{ github.event.number }"
           destination_branch: "master"
           github_token: ${{ secrets.PAT }}
           pr_label: "RC-${{ github.event.number }}"
