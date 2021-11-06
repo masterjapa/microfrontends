@@ -17,12 +17,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
 
       # Make changes to pull request here
       - name: Create Release Candidate
         id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
+          token: ${{ secrets.PAT }}
           base: ${{ github.head_ref }}
           commit-message: Release candidate {{ steps.cpr.outputs.pull-request-number }}
           title: RC-${{ steps.cpr.outputs.pull-request-number }}
