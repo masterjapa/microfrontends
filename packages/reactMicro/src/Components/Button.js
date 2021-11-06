@@ -15,7 +15,7 @@ export default ({ text = "Home Button", onClick }) => {
 
   return <button style={{
     border: "none",
-    background: "red",
+    background: "blue",
     color: "white",
     padding: "20px"
   }} onClick={onClickHandler}>{text}</button>;
