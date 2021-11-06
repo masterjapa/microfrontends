@@ -34,9 +34,9 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           base: ${{ github.head_ref }}
-          commit-message: Release candidate ${{ steps.cpr.outputs.pull-request-number }}
+          commit-message: Release candidate ${{ github.event.number }}
           title: RC-${{ steps.cpr.outputs.pull-request-number }}
           labels: RC
-          branch: release-candidate/${{ steps.cpr.outputs.pull-request-number }}
+          branch: release-candidate/${{ github.event.number }}
           
 
