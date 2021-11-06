@@ -41,4 +41,3 @@ jobs:
           title: RC-${{ github.event.number }}
           labels: RC-${{ github.event.number }}, release-candidate
           branch: release-candidate/${{ github.event.number }}
-          base: master
