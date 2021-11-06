@@ -8,19 +8,18 @@ on:
   pull_request:
     branches:
       - hmg
-    types: [closed]
+    types: [opened, synchronize]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   CreateCandidateBranch:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.PAT }}
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Create Branch
         uses: peterjgrainger/action-create-branch@v2.0.1
