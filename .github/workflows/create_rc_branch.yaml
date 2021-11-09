@@ -29,7 +29,7 @@ jobs:
         with:
           branch: release-candidate/${{ github.event.number }}
 
-      # create the PR-rc
+      # create the PR-RC
       - name: Create RC Pull Request
         uses: repo-sync/pull-request@v2
         with:
@@ -37,3 +37,25 @@ jobs:
           github_token: ${{ secrets.PAT }}
           pr_label: RC-${{ github.event.number }}
           pr_title: RC-${{ github.event.number }}
+
+      - name: Create Rollback
+        uses: peterjgrainger/action-create-branch@v2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        with:
+          branch: rollback/${{ github.event.number }}
+        
+      - name: Commit Rollback
+        run: |
+          git config --global user.name 'Rollback CI'
+          git revert -m 1 ${{ github.event.pull_request.head.sha }} --no-edit
+          git push origin rollback/${{ github.event.number }}
+
+      # create the PR-Rollback
+      - name: Create RC Pull Request
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: rollback/${{ github.event.number }}
+          github_token: ${{ secrets.PAT }}
+          pr_label: Rollback-${{ github.event.number }}
+          pr_title: Rollback-${{ github.event.number }}
