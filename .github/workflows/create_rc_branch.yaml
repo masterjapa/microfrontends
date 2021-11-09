@@ -48,7 +48,7 @@ jobs:
       - name: Commit Rollback
         run: |
           git config --global user.name 'Rollback CI'
-          git revert -m 1 $GITHUB_SHA --no-edit
+          git revert -m 1 ${{ GITHUB_SHA }} --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
 
       # create the PR-Rollback
