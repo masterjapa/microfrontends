@@ -4,7 +4,7 @@ name: RC Create Branch
 
 # Controls when the workflow will run
 on:
-  # Triggers only when a PR is open on hmg
+  # Triggers only when a PR is merged on hmg
   pull_request:
     branches:
       - hmg
@@ -22,7 +22,7 @@ jobs:
           token: ${{ secrets.PAT }}
           ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Create Branch
+      - name: Create Branch For Release Candidate
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
@@ -35,17 +35,17 @@ jobs:
         with:
           source_branch: release-candidate/${{ github.event.number }}
           github_token: ${{ secrets.PAT }}
-          pr_label: RC-${{ github.event.number }}
+          pr_label: release-candidate
           pr_title: RC-${{ github.event.number }}
 
-      - name: Create Rollback
+      - name: Create Branch for Rollback
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           branch: rollback/${{ github.event.number }}
         
-      - name: Commit Rollback
+      - name: Commit Rollback to branch
         run: |
           git config --global user.name 'Rollback CI'
           git revert -m 1 $GITHUB_SHA --no-edit
@@ -58,5 +58,5 @@ jobs:
           destination_branch: "hmg"
           source_branch: rollback/${{ github.event.number }}
           github_token: ${{ secrets.PAT }}
-          pr_label: Rollback-${{ github.event.number }}
+          pr_label: rollback
           pr_title: Rollback-${{ github.event.number }}
