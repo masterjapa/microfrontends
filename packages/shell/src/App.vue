@@ -17,8 +17,8 @@ export default {
   },
   data() {
     return {
-      title: "Vue microfrontend component renderizado via shell",
-    };
+      title: "Vue microfrontend component renderizado via shell"
+    }
   },
   methods: {
     async fetchReactLoader() {
@@ -44,7 +44,7 @@ export default {
       this.reactRender(
         this.createElement(this.reactComponent, {
           text: "Trocar o titulo",
-          onClick: () => (this.title = "Mudei o titulo via componente react"),
+          onClick: () => this.title = "Mudei o titulo via componente react"
         }),
         this.$refs.react
       );
@@ -60,7 +60,7 @@ export default {
         await this.fetchReactDomLoader();
         await this.fetchReactComponent();
       } catch (error) {
-        console.error("erro no mount", error);
+        console.error("error", error);
       }
 
       this.updateReactComponent();

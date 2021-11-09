@@ -13,17 +13,10 @@ export default ({ text = "Home Button", onClick }) => {
 
   console.log("Button.js: rendered.");
 
-  return (
-    <button
-      style={{
-        border: "none",
-        background: "red",
-        color: "white",
-        padding: "20px",
-      }}
-      onClick={onClickHandler}
-    >
-      {text}
-    </button>
-  );
+  return <button style={{
+    border: "none",
+    background: "blue",
+    color: "white",
+    padding: "20px"
+  }} onClick={onClickHandler}>{text}</button>;
 };
