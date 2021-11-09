@@ -34,4 +34,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### testing CI v.42
 
-### testing rollback 3
+### testing rollback com alterações significativas
