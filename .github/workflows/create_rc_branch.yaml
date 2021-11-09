@@ -48,13 +48,14 @@ jobs:
       - name: Commit Rollback
         run: |
           git config --global user.name 'Rollback CI'
-          git revert -m 1 ${{ github.event.pull_request.head.sha }} --no-edit
+          git revert -m 1 ${{ git rev-parse HEAD }} --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
 
       # create the PR-Rollback
       - name: Create RC Pull Request
         uses: repo-sync/pull-request@v2
         with:
+          destination_branch: "hmg"
           source_branch: rollback/${{ github.event.number }}
           github_token: ${{ secrets.PAT }}
           pr_label: Rollback-${{ github.event.number }}
