@@ -37,6 +37,7 @@ jobs:
           github_token: ${{ secrets.PAT }}
           pr_label: release-candidate
           pr_title: RC-${{ github.event.number }}
+          pr_body: ${{ github.event.pull_request.body }}
 
       - name: Create Branch for Rollback
         uses: peterjgrainger/action-create-branch@v2.0.1
@@ -44,7 +45,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           branch: rollback/${{ github.event.number }}
-        
+
       - name: Commit Rollback to branch
         run: |
           git config --global user.name 'Rollback CI'
@@ -60,3 +61,4 @@ jobs:
           github_token: ${{ secrets.PAT }}
           pr_label: rollback
           pr_title: Rollback-${{ github.event.number }}
+          pr_body: This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} in branch ${{ github.event.pull_request.url }}
