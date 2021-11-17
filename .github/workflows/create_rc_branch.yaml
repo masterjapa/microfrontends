@@ -37,7 +37,7 @@ jobs:
           github_token: ${{ secrets.PAT }}
           pr_label: release-candidate
           pr_title: RC-${{ github.event.number }}
-          pr_body: { { github.event.pull_request.body } }
+          pr_body: ${{ github.event.pull_request.body }}
 
       - name: Create Branch for Rollback
         uses: peterjgrainger/action-create-branch@v2.0.1
