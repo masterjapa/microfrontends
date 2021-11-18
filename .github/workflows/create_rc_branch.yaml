@@ -8,7 +8,7 @@ on:
   pull_request:
     branches:
       - hmg
-    types: [closed]
+    types: [opened]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -63,4 +63,7 @@ jobs:
           github_token: ${{ secrets.PAT }}
           pr_label: rollback
           pr_title: Rollback-${{ github.event.number }}
-          pr_body: This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} in branch ${{ github.event.pull_request.head.ref }}
+          pr_body: |
+            This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} 
+            in branch [${{ github.event.pull_request.head.ref }}](https://github.com/Tracksale/a2/tree/${{ github.event.pull_request.head.ref }}) 
+            and [pull request](https://github.com/Tracksale/a2/pulls/${{ github.event.number }})
