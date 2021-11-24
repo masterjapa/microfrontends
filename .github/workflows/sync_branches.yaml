@@ -26,7 +26,7 @@ jobs:
           git checkout origin/hmg
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git pull
+          git pull origin/hmg
           git fetch origin/master
           git merge origin/master
-          git push
+          git push origin/hmg
