@@ -24,6 +24,6 @@ jobs:
       - name: Sync branch hmg with branch prod
         run: |
           git pull
-          git fetch origin master
-          git merge origin master
-          git push origin hmg
+          git fetch origin/master
+          git merge origin/master
+          git push
