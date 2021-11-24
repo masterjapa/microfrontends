@@ -27,6 +27,6 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git pull
-          git fetch origin/master
-          git merge origin/master
-          git push origin/hmg
+          git fetch master
+          git merge master
+          git push
