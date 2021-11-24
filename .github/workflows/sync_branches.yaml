@@ -22,6 +22,7 @@ jobs:
       # create the PR-Rollback
       - name: Sync branch hmg with branch prod
         run: |
+          git fetch
           git checkout origin hmg
           git config user.name github-actions
           git config user.email github-actions@github.com
