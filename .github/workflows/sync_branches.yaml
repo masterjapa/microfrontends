@@ -21,8 +21,9 @@ jobs:
 
       # create the PR-Rollback
       - name: Sync branch hmg with branch prod
-        uses: repo-sync/github-sync@v2
-        with:
-          destination_branch: "hmg"
-          source_branch: "master"
-          github_token: ${{ secrets.PAT }}
+        run: |
+          git checkout hmg
+          git pull
+          git fetch origin prod
+          git merge prod
+          git push origin hmg
