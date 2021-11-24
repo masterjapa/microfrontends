@@ -17,12 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          ref: hmg
           token: ${{ secrets.PAT }}
 
       # create the PR-Rollback
       - name: Sync branch hmg with branch prod
         run: |
-          git checkout hmg
           git pull
           git fetch origin prod
           git merge prod
