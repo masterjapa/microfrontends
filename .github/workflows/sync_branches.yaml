@@ -21,7 +21,7 @@ jobs:
 
       # create the PR-Rollback
       - name: Sync branch hmg with branch prod
-        uses: repo-sync/pull-request@v2
+        uses: repo-sync/github-sync@v2
         with:
           destination_branch: "hmg"
           source_branch: "master"
