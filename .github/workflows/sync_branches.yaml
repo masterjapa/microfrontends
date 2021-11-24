@@ -1,0 +1,28 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Sync Branches
+
+# Controls when the workflow will run
+on:
+  # Triggers only when a PR is merged on hmg
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  SyncHMGWithProd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+
+      # create the PR-Rollback
+      - name: Sync branch hmg with branch prod
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "hmg"
+          source_branch: "prod"
+          github_token: ${{ secrets.PAT }}
