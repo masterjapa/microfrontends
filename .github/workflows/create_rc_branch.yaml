@@ -39,11 +39,14 @@ jobs:
           pr_body: ${{ github.event.pull_request.body }}
 
       - name: Commit Rollback to branch
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+          ref: rollback/${{ github.event.number }}
         run: |
-          git checkout -b rollback/${{ github.event.number }}
           git config --global user.name 'Rollback CI'
-          git revert -m 1 ${{ github.event.after }} --no-edit
-          git push -f origin HEAD:rollback/${{ github.event.number }}
+          git revert -m 1 $GITHUB_SHA --no-edit
+          git push
 
       # create the PR-Rollback
       - name: Create RC Pull Request
