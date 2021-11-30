@@ -38,20 +38,9 @@ jobs:
           pr_title: RC-${{ github.event.number }}
           pr_body: ${{ github.event.pull_request.body }}
 
-      - name: Create Branch for Rollback
-        uses: peterjgrainger/action-create-branch@v2.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-        with:
-          branch: rollback/${{ github.event.number }}
-
       - name: Commit Rollback to branch
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
-          TESTE=$(git log --pretty=format:"%H" --merges -n 1)
-          echo "$TESTE"
-          echo "${{ github.event }}"
+          git checkout -b rollback/${{ github.event.number }}
           git config --global user.name 'Rollback CI'
           git revert -m 1 ${{ github.event.after }} --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
