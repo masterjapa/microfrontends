@@ -47,6 +47,8 @@ jobs:
           branch: rollback/${{ github.event.number }}
 
       - name: Commit Rollback to branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         run: |
           git config --global user.email "${GITHUB_ACTOR}"
           git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
