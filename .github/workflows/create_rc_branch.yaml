@@ -55,8 +55,6 @@ jobs:
           git config --global user.name 'Rollback CI'
           git revert -m 1 HEAD^ --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
-        env:
-          GITHUB_MERGE_CONTEXT: ${{ toJson(github) }}
 
       # create the PR-Rollback
       - name: Create RC Pull Request
