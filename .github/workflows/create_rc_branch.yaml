@@ -43,16 +43,14 @@ jobs:
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_CONTEXT: ${{ toJson(github) }}
         with:
           branch: rollback/${{ github.event.number }}
-
-      - name: Commit Rollback to branch
         run: |
+          echo "$GITHUB_CONTEXT"
           git config --global user.name 'Rollback CI'
           git revert HEAD^ --no-edit
-          git push -f origin HEAD:rollback/${{ github.event.number }}
-        env:
-          GITHUB_MERGE_CONTEXT: ${{ toJson(github) }}
+          git push
 
       # create the PR-Rollback
       - name: Create RC Pull Request
