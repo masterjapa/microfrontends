@@ -21,7 +21,6 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
 
       - name: Create Branch For Release Candidate
         uses: peterjgrainger/action-create-branch@v2.0.1
@@ -56,7 +55,7 @@ jobs:
           git push
 
       # create the PR-Rollback
-      - name: Create RC Pull Request
+      - name: Create Rollback Pull Request
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "hmg"
