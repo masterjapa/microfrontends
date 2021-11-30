@@ -1,6 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
-name: RC Create Branch
+name: Release Flow
 
 # Controls when the workflow will run
 on:
@@ -14,17 +12,21 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   CreateCandidateBranch:
-    if: github.event.pull_request.merged == true && ${{ contains(github.ref, 'refs/heads/revert') == false }}
+    if: |
+      github.event.pull_request.merged == true &&
+      contains(github.ref, 'refs/heads/revert') == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
       - name: Create Branch For Release Candidate
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
         with:
           branch: release-candidate/${{ github.event.number }}
 
@@ -32,8 +34,9 @@ jobs:
       - name: Create RC Pull Request
         uses: repo-sync/pull-request@v2
         with:
+          destination_branch: "prod"
           source_branch: release-candidate/${{ github.event.number }}
-          github_token: ${{ secrets.PAT }}
+          github_token: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
           pr_label: release-candidate
           pr_title: RC-${{ github.event.number }}
           pr_body: ${{ github.event.pull_request.body }}
@@ -41,28 +44,22 @@ jobs:
       - name: Create Branch for Rollback
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
         with:
           branch: rollback/${{ github.event.number }}
 
       - name: Commit Rollback to branch
         run: |
-          git config --global user.email "${GITHUB_ACTOR}"
-          git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
-          git update-ref -d refs/remotes/origin/rollback/${{ github.event.number }}
-          git pull
-          git checkout rollback/${{ github.event.number }}
-          git pull
+          git config --global user.name 'Rollback CI'
           git revert -m 1 $GITHUB_SHA --no-edit
-          git push
-
+          git push -f origin HEAD:rollback/${{ github.event.number }}
       # create the PR-Rollback
       - name: Create Rollback Pull Request
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "hmg"
           source_branch: rollback/${{ github.event.number }}
-          github_token: ${{ secrets.PAT }}
+          github_token: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
           pr_label: rollback
           pr_title: Rollback-${{ github.event.number }}
-          pr_body: This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} in branch ${{ github.event.pull_request.head.ref }}
+          pr_body: This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} in branch [${{ github.event.pull_request.head.ref }}](https://github.com/Tracksale/a2/tree/${{ github.event.pull_request.head.ref }}) and [pull request](https://github.com/Tracksale/a2/pulls/${{ github.event.number }})
