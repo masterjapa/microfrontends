@@ -46,17 +46,14 @@ jobs:
         with:
           branch: rollback/${{ github.event.number }}
 
-      - name: get the sha
-        run: |
-          echo "$GITHUB_MERGE_CONTEXT"| jq '.event.commits[].id' | tail -1 | head -1 |sed 's/\"//g'
-        env:
-          GITHUB_MERGE_CONTEXT: ${{ toJson(github) }}
-
       - name: Commit Rollback to branch
         run: |
+          echo "$GITHUB_MERGE_CONTEXT"| jq '.event.commits[].id' | tail -1 | head -1 |sed 's/\"//g'
           git config --global user.name 'Rollback CI'
           git revert -m 1 $GITHUB_MERGE_CONTEXT --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
+        env:
+          GITHUB_MERGE_CONTEXT: ${{ toJson(github) }}
 
       # create the PR-Rollback
       - name: Create RC Pull Request
