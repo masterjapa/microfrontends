@@ -43,7 +43,7 @@ jobs:
       - name: Create Branch for Rollback
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
         with:
           branch: rollback/${{ github.event.number }}
 
