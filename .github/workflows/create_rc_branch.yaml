@@ -19,14 +19,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
+          token: ${{ secrets.PAT }}
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - name: Create Branch For Release Candidate
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           branch: release-candidate/${{ github.event.number }}
 
@@ -36,7 +36,7 @@ jobs:
         with:
           destination_branch: "prod"
           source_branch: release-candidate/${{ github.event.number }}
-          github_token: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
+          github_token: ${{ secrets.PAT }}
           pr_label: release-candidate
           pr_title: RC-${{ github.event.number }}
           pr_body: ${{ github.event.pull_request.body }}
@@ -44,7 +44,7 @@ jobs:
       - name: Create Branch for Rollback
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           branch: rollback/${{ github.event.number }}
 
@@ -59,7 +59,7 @@ jobs:
         with:
           destination_branch: "hmg"
           source_branch: rollback/${{ github.event.number }}
-          github_token: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN }}
+          github_token: ${{ secrets.PAT }}
           pr_label: rollback
           pr_title: Rollback-${{ github.event.number }}
-          pr_body: This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} in branch [${{ github.event.pull_request.head.ref }}](https://github.com/Tracksale/a2/tree/${{ github.event.pull_request.head.ref }}) and [pull request](https://github.com/Tracksale/a2/pulls/${{ github.event.number }})
+          pr_body: This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} in branch [${{ github.event.pull_request.head.ref }}]
