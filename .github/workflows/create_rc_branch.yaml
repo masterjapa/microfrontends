@@ -49,7 +49,7 @@ jobs:
       - name: Commit Rollback to branch
         run: |
           git config --global user.name 'Rollback CI'
-          git revert ${{ github.event.pull_request.head.sha }} --no-edit
+          git revert HEAD^ --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
         env:
           GITHUB_MERGE_CONTEXT: ${{ toJson(github) }}
