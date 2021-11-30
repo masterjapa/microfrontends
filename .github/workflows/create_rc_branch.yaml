@@ -53,7 +53,7 @@ jobs:
           echo "$TESTE"
           echo "${{ github.event }}"
           git config --global user.name 'Rollback CI'
-          git revert -m 1 HEAD^ --no-edit
+          git revert -m 1 ${{ github.event.after }} --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
 
       # create the PR-Rollback
