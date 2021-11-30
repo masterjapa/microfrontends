@@ -8,7 +8,7 @@ on:
   pull_request:
     branches:
       - hmg
-    types: [opened]
+    types: [opened, synchronize]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -48,8 +48,8 @@ jobs:
       - name: Commit Rollback to branch
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-          TESTE: ${{ git log --pretty=format:"%H" --merges -n 1 }}
         run: |
+          TESTE=$(git log --pretty=format:"%H" --merges -n 1)
           echo "$GITHUB_CONTEXT"
           echo "$TESTE"
           git config --global user.name 'Rollback CI'
