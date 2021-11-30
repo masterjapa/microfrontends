@@ -6,14 +6,13 @@ on:
   pull_request:
     branches:
       - hmg
-    types: [closed]
+    types: [opened, synchronize]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   CreateCandidateBranch:
     if: |
-      github.event.pull_request.merged == true &&
       contains(github.ref, 'refs/heads/revert') == false
     runs-on: ubuntu-latest
     steps:
@@ -21,6 +20,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
       - name: Create Branch For Release Candidate
         uses: peterjgrainger/action-create-branch@v2.0.1
@@ -49,6 +49,8 @@ jobs:
 
       - name: Commit Rollback to branch
         run: |
+          echo ${{ github.event.base }}
+          echo ${{ github.event.head }}
           git config --global user.name 'Rollback CI'
           git revert -m 1 $GITHUB_SHA --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
