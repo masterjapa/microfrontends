@@ -21,7 +21,6 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
 
       - name: Create Branch For Release Candidate
         uses: peterjgrainger/action-create-branch@v2.0.1
