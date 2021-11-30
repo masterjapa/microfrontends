@@ -43,7 +43,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           ref: rollback/${{ github.event.number }}
-        run: |
+      - run: |
           git config --global user.name 'Rollback CI'
           git revert -m 1 $GITHUB_SHA --no-edit
           git push
