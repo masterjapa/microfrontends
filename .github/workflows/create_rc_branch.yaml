@@ -46,13 +46,15 @@ jobs:
         with:
           branch: rollback/${{ github.event.number }}
 
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+          ref: rollback/${{ github.event.number }}
+
       - name: Commit Rollback to branch
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
         run: |
           git config --global user.email "${GITHUB_ACTOR}"
           git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
-          git checkout -b rollback/${{ github.event.number }}
           git pull
           git revert -m 1 $GITHUB_SHA --no-edit
           git push
