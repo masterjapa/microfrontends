@@ -1,6 +1,6 @@
 name: Create HMG Flow
 
-# Controls when the workflow will run
+# Start workflow
 on:
   issue_comment:
     types: [created]
