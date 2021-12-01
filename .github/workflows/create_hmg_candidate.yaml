@@ -2,7 +2,6 @@ name: Create HMG Flow
 
 # Start workflow
 on:
-  pull_request:
   issue_comment:
     types: [created]
 jobs:
