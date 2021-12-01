@@ -5,6 +5,7 @@ on:
   # Triggers only when a PR is merged on hmg
   pull_request_review:
   pull_request:
+  discussion_comment:
     branches:
       - master
   workflow_dispatch:
