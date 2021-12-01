@@ -1,4 +1,4 @@
-name: Release Flow
+name: Rollback Flow
 
 # Controls when the workflow will run
 on:
@@ -11,7 +11,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  CreateCandidateBranch:
+  CreateRollback:
     if: |
       github.event.pull_request.merged == true &&
       contains(github.event.pull_request.head.ref, 'rollback/') == false
@@ -23,24 +23,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: Create Branch For Release Candidate
-        uses: peterjgrainger/action-create-branch@v2.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-        with:
-          branch: release-candidate/${{ github.event.number }}
-
-      # create the PR-RC
-      - name: Create RC Pull Request
-        uses: repo-sync/pull-request@v2
-        with:
-          destination_branch: "master"
-          source_branch: release-candidate/${{ github.event.number }}
-          github_token: ${{ secrets.PAT }}
-          pr_label: release-candidate
-          pr_title: RC-${{ github.event.number }}
-          pr_body: ${{ github.event.pull_request.body }}
-
       - name: Create Branch for Rollback
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
@@ -50,11 +32,11 @@ jobs:
 
       - name: Commit Rollback to branch
         run: |
-          echo ${{ github.event.base }}
-          echo ${{ github.event.head }}
-          git config --global user.name 'Rollback CI'
-          git revert -m 1 $GITHUB_SHA --no-edit
+          git config --global user.email "${GITHUB_ACTOR}"
+          git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
+          git revert -m 1 ${{ github.event.pull_request.merge_commit_sha }} --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
+
       # create the PR-Rollback
       - name: Create Rollback Pull Request
         uses: repo-sync/pull-request@v2
