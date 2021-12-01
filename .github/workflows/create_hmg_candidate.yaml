@@ -18,8 +18,8 @@ jobs:
         with:
           script: |
             try {
-              console.log(context)
-              const result = await github.request(context.payload.issue.pull_request.url)
+              const result = await github.request(context.payload.issue.html_url)
+              console.log(result.data)
               return result.data
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
