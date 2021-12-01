@@ -1,4 +1,4 @@
-name: Release Flow
+name: Rollback Flow
 
 # Controls when the workflow will run
 on:

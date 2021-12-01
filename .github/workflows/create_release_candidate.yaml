@@ -1,4 +1,4 @@
-name: Release Flow
+name: Release Candidate Flow
 
 # Controls when the workflow will run
 on:
