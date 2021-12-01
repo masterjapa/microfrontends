@@ -36,6 +36,7 @@ jobs:
           git pull
           git checkout release-candidate/${{ github.event.number }}
           git pull origin HEAD:${{ github.event.pull_request.head.ref }} --rebase
+          git pull
           git push
 
       # create the PR-RC
