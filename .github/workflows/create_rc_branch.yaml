@@ -50,9 +50,8 @@ jobs:
 
       - name: Commit Rollback to branch
         run: |
-          echo ${{ github.event.base }}
-          echo ${{ github.event.head }}
-          git config --global user.name 'Rollback CI'
+          git config --global user.email "${GITHUB_ACTOR}"
+          git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
           git revert -m 1 $GITHUB_SHA --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
       # create the PR-Rollback
