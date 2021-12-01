@@ -7,7 +7,7 @@ on:
 jobs:
   CreateHMGCandidate:
     if: |
-      contains(github.event.comment.html_url, '/pull/')
+      contains(github.event.comment.html_url, '/pull/') &&
       contains(github.event.comment.body, 'create-hmg')
     runs-on: ubuntu-latest
     steps:
