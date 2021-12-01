@@ -4,8 +4,6 @@ name: Create HMG Flow
 on:
   issue_comment:
     types: [created]
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   CreateHMGCandidate:
     if: |
