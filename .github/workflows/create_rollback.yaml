@@ -35,6 +35,7 @@ jobs:
           git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
           git revert -m 1 $GITHUB_SHA --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
+
       # create the PR-Rollback
       - name: Create Rollback Pull Request
         uses: repo-sync/pull-request@v2
