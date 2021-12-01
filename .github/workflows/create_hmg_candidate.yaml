@@ -37,14 +37,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
-          branch: hmg/${{ fromJSON(steps.get-pr.outputs.result).number }}
+          branch: hmg-${{ fromJSON(steps.get-pr.outputs.result).number }}
 
       # create the PR-HMG
       - name: Create HMG Pull Request
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "hmg"
-          source_branch: hmg/${{ fromJSON(steps.get-pr.outputs.result).number }}
+          source_branch: hmg-${{ fromJSON(steps.get-pr.outputs.result).number }}
           github_token: ${{ secrets.PAT }}
           pr_label: hmg-candidate
           pr_title: HMG | ${{ fromJSON(steps.get-pr.outputs.result).title }}
