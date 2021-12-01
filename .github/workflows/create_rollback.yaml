@@ -6,13 +6,14 @@ on:
   pull_request:
     branches:
       - hmg
-    types: [opened, synchronize]
+    types: [closed]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   CreateCandidateBranch:
     if: |
+      github.event.pull_request.merged == true &&
       contains(github.event.pull_request.head.ref, 'rollback/') == false
     runs-on: ubuntu-latest
     steps:
