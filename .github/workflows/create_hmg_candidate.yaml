@@ -2,21 +2,15 @@ name: Create HMG Flow
 
 # Controls when the workflow will run
 on:
-  # Triggers only when a PR is merged on hmg
-  pull_request_review:
-  pull_request:
-  discussion_comment:
-    branches:
-      - master
+  issue_comment:
+    types: [created]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   CreateHMGCandidate:
     if: |
-      contains(github.event.pull_request.head.ref, 'rollback/') == false &&
-      github.action == 'created' &&
-      contains(github.event.comment.body, 'create-hmg') == true
+      contains(github.event.comment.body, 'create-hmg')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
