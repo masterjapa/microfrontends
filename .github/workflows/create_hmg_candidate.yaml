@@ -38,6 +38,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           branch: hmg-${{ fromJSON(steps.get-pr.outputs.result).number }}
+          
+      - name: Commit To branch #aqui eu estou garantindo que num update a branch vai ser commitada de novo
+        run: |
+          git config --global user.email "${GITHUB_ACTOR}"
+          git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
+          git pull
+          git push -f origin HEAD:hmg-${{ fromJSON(steps.get-pr.outputs.result).number }}
 
       # create the PR-HMG
       - name: Create HMG Pull Request
