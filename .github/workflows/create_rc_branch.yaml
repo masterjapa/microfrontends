@@ -14,7 +14,7 @@ jobs:
   CreateCandidateBranch:
     if: |
       github.event.pull_request.merged == true &&
-      contains(github.event.pull_request.head.ref, 'rollback/') == false
+      contains(github.ref, 'refs/heads/revert') == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
