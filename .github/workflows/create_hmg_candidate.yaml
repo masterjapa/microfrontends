@@ -4,12 +4,12 @@ name: Create HMG Flow
 on:
   issue_comment:
     types: [created]
-  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   CreateHMGCandidate:
     if: |
+      contains(github.event.comment.html_url, '/pull/')
       contains(github.event.comment.body, 'create-hmg')
     runs-on: ubuntu-latest
     steps:
