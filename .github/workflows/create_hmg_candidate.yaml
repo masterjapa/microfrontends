@@ -12,9 +12,10 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   CreateHMGCandidate:
-    if: |
+    run: |
       echo github.event.action == 'submitted' &&
       echo github.event.state == 'approved' &&
+    if: |
       contains(github.event.pull_request.head.ref, 'rollback/') == false &&
       contains(github.event.pull_request.labels.*.name, 'release-candidate') == true
     runs-on: ubuntu-latest
