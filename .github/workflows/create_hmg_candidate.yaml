@@ -2,24 +2,17 @@ name: Create HMG Flow
 
 # Controls when the workflow will run
 on:
-  # Triggers only when a PR is merged on hmg
-  pull_request_review:
-  pull_request:
-    branches:
-      - master
-  workflow_dispatch:
+  issue_comment:
+    types: [created]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   CreateHMGCandidate:
     if: |
-      contains(github.event.pull_request.head.ref, 'rollback/') == false &&
-      contains(github.event.pull_request.labels.*.name, 'release-candidate') == true
+      contains(github.event.comment.html_url, '/pull/')
+      contains(github.event.comment.body, 'create-hmg')
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo github.event.action == 'submitted'
-          echo github.event.state == 'approved'
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.PAT }}
@@ -31,15 +24,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
-          branch: hmg-candidate/${{ github.event.number }}
+          branch: hmg/${{ github.event.pull_request.head.ref }}
 
       # create the PR-HMG
       - name: Create HMG Pull Request
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "hmg"
-          source_branch: hmg-candidate/${{ github.event.number }}
+          source_branch: hmg/${{ github.event.pull_request.head.ref }}
           github_token: ${{ secrets.PAT }}
           pr_label: hmg-candidate
-          pr_title: HMG-${{ github.event.number }} | ${{ github.event.pull_request.title }}
+          pr_title: HMG | ${{ github.event.pull_request.title }}
           pr_body: ${{ github.event.pull_request.body }}
