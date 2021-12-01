@@ -59,9 +59,8 @@ export default {
         await this.fetchReactLoader();
         await this.fetchReactDomLoader();
         await this.fetchReactComponent();
+        console.info("elemento montado");
       } catch (error) {
-        console.error("erro no mount", error);
-        console.error("erro no mount", error);
         console.error("erro no mount", error);
       }
 
