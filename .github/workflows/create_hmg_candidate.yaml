@@ -8,14 +8,32 @@ on:
 jobs:
   CreateHMGCandidate:
     if: |
+      github.event.issue.pull_request &&
       contains(github.event.comment.html_url, '/pull/') &&
       contains(github.event.comment.body, 'create-hmg')
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/github-script@v3
+        id: get-pr
+        with:
+          script: |
+            const request = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            }
+            core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
+            try {
+              const result = await github.pulls.get(request)
+              return result.data
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.PAT }}
-          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
+          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }} # or .head.ref for branch name
           fetch-depth: 0
 
       - name: Create Branch For Hmg Candidate
@@ -23,15 +41,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
-          branch: hmg/${{ github.event.pull_request.head.ref }}
+          branch: hmg/${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
 
       # create the PR-HMG
       - name: Create HMG Pull Request
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "hmg"
-          source_branch: hmg/${{ github.event.pull_request.head.ref }}
+          source_branch: hmg/${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
           github_token: ${{ secrets.PAT }}
           pr_label: hmg-candidate
-          pr_title: HMG | ${{ github.event.pull_request.title }}
-          pr_body: ${{ github.event.pull_request.body }}
+          pr_title: HMG | ${{ fromJSON(steps.get-pr.outputs.result).title }}
+          pr_body: ${{ fromJSON(steps.get-pr.outputs.result).body }}
