@@ -21,6 +21,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
       - name: Create Branch for Rollback
         uses: peterjgrainger/action-create-branch@v2.0.1
@@ -33,7 +34,7 @@ jobs:
         run: |
           git config --global user.email "${GITHUB_ACTOR}"
           git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
-          git revert -m 1 $GITHUB_SHA --no-edit
+          git revert -m 1 ${{ github.event.pull_request.merge_commit_sha }} --no-edit
           git push -f origin HEAD:rollback/${{ github.event.number }}
 
       # create the PR-Rollback
