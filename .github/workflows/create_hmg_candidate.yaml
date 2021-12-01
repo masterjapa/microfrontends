@@ -2,19 +2,34 @@ name: Create HMG Flow
 
 # Controls when the workflow will run
 on:
+  pull_request:
   issue_comment:
     types: [created]
 jobs:
   CreateHMGCandidate:
     if: |
+      github.event.issue.pull_request &&
       contains(github.event.comment.html_url, '/pull/') &&
       contains(github.event.comment.body, 'create-hmg')
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/github-script@v3
+        id: get-pr
+        with:
+          script: |
+            try {
+              console.log(context)
+              const url = context.payload.comment.issue_url.replace('issues', 'pulls')
+              const result = await github.request(url)
+              console.log(result.data)
+              return result.data
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.PAT }}
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }} # or .head.ref for branch name
           fetch-depth: 0
 
       - name: Create Branch For Hmg Candidate
@@ -22,15 +37,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
-          branch: hmg/${{ github.event.pull_request.head.ref }}
+          branch: hmg-${{ fromJSON(steps.get-pr.outputs.result).number }}
 
       # create the PR-HMG
       - name: Create HMG Pull Request
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "hmg"
-          source_branch: hmg/${{ github.event.pull_request.head.ref }}
+          source_branch: hmg-${{ fromJSON(steps.get-pr.outputs.result).number }}
           github_token: ${{ secrets.PAT }}
           pr_label: hmg-candidate
-          pr_title: HMG | ${{ github.event.pull_request.title }}
-          pr_body: ${{ github.event.pull_request.body }}
+          pr_title: HMG | ${{ fromJSON(steps.get-pr.outputs.result).title }}
+          pr_body: ${{ fromJSON(steps.get-pr.outputs.result).body }}
