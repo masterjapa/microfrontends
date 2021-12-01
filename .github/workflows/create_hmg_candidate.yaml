@@ -19,7 +19,8 @@ jobs:
           script: |
             try {
               console.log(context)
-              const result = await github.request(context.payload.issue.html_url)
+              const url = context.payload.comment.issue_url.replace('issues', 'pulls')
+              const result = await github.request(url)
               console.log(result.data)
               return result.data
             } catch (err) {
