@@ -63,6 +63,7 @@ export default {
         console.error("eita testando", error);
         console.error("erro no mount", error);
         console.error("erro no mount", error);
+        console.error("erro no mount", error);
       }
 
       this.updateReactComponent();
