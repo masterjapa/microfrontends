@@ -1,0 +1,37 @@
+name: Label the Release Candidate
+
+# Controls when the workflow will run
+on:
+  # Triggers only when a PR is merged on hmg
+  pull_request:
+    branches:
+      - hmg
+    types: [closed]
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  CreateRollback:
+    if: |
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.head.ref, 'rollback/') == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - uses: actions/github-script@v3
+        id: get-pr-number
+        with:
+          script: |
+            const branch = ${{ context.payload.head.ref }}
+            return branch.replace('hmg-', '')
+
+      - name: Create Label for HMG
+        uses: andymckay/labeler@master
+        with:
+          add-labels: "Homologação"
+          issue-number: ${{ steps.get-pr-number.outputs.result }}
