@@ -27,8 +27,8 @@ jobs:
         id: get-pr-number
         with:
           script: |
-            const branch = context.payload.head.ref
             console.log(branch)
+            const branch = context.payload.pull_request.head.ref
             return branch.replace('hmg-', '')
 
       - name: Create Label for HMG
