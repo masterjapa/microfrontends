@@ -28,6 +28,7 @@ jobs:
         with:
           script: |
             const branch = context.payload.head.ref
+            console.log(branch)
             return branch.replace('hmg-', '')
 
       - name: Create Label for HMG
@@ -35,3 +36,4 @@ jobs:
         with:
           add-labels: "Homologação"
           issue-number: ${{ steps.get-pr-number.outputs.result }}
+          repo-token: ${{ secrets.PAT }}
