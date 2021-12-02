@@ -6,7 +6,7 @@ on:
   pull_request:
     branches:
       - hmg
-    types: [closed]
+    types: [opened, synchonize]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -27,8 +27,8 @@ jobs:
         id: get-pr-number
         with:
           script: |
-            console.log(branch)
             const branch = context.payload.pull_request.head.ref
+            console.log(branch)
             return branch.replace('hmg-', '')
 
       - name: Create Label for HMG
