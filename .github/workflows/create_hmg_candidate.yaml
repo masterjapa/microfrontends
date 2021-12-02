@@ -35,7 +35,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           branch: hmg-${{ fromJSON(steps.get-pr.outputs.result).number }}
-          
+
       - name: Commit To branch #aqui eu estou garantindo que num update a branch vai ser commitada de novo
         run: |
           git config --global user.email "${GITHUB_ACTOR}"
@@ -53,8 +53,3 @@ jobs:
           pr_label: hmg-candidate
           pr_title: HMG | ${{ fromJSON(steps.get-pr.outputs.result).title }}
           pr_body: ${{ fromJSON(steps.get-pr.outputs.result).body }}
-
-      - name: Create Label for HMG
-        uses: andymckay/labeler@master
-        with:
-          add-labels: "Homologação"
