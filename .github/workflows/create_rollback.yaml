@@ -45,5 +45,5 @@ jobs:
           source_branch: rollback/${{ github.event.number }}
           github_token: ${{ secrets.PAT }}
           pr_label: rollback
-          pr_title: Rollback | ${{ github.event.pull_request.title }}
+          pr_title: Rollback-${{ github.event.number }} | ${{ github.event.pull_request.title }}
           pr_body: This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} in branch [${{ github.event.pull_request.head.ref }}]
