@@ -53,3 +53,8 @@ jobs:
           pr_label: hmg-candidate
           pr_title: HMG | ${{ fromJSON(steps.get-pr.outputs.result).title }}
           pr_body: ${{ fromJSON(steps.get-pr.outputs.result).body }}
+
+      - name: Create Label for HMG
+        uses: andymckay/labeler@master
+        with:
+          add-labels: "Homologação"
