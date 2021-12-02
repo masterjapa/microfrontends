@@ -27,6 +27,7 @@ jobs:
         id: get-pr-number
         with:
           script: |
+            console.log(branch)
             const branch = context.payload.pull_request.head.ref
             return branch.replace('hmg-', '')
 
@@ -35,3 +36,4 @@ jobs:
         with:
           add-labels: "Homologação"
           issue-number: ${{ steps.get-pr-number.outputs.result }}
+          repo-token: ${{ secrets.PAT }}
