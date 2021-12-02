@@ -60,7 +60,6 @@ export default {
         await this.fetchReactDomLoader();
         await this.fetchReactComponent();
       } catch (error) {
-        console.error("eita testando", error);
         console.error("erro no mount", error);
         console.error("erro no mount", error);
       }
