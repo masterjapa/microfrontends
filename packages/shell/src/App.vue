@@ -62,6 +62,8 @@ export default {
       } catch (error) {
         console.error("eita testando", error);
         console.error("eita testando", error);
+        console.error("eita testando", error);
+        console.error("eita testando", error);
       }
 
       this.updateReactComponent();
