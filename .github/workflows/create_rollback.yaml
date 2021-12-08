@@ -1,59 +1,38 @@
 name: Rollback Flow
 
-# Start workflow
+# Controls when the workflow will run
 on:
-  issue_comment:
-    types: [created]
+  # Triggers only when a PR is merged on hmg
+  pull_request:
+    branches:
+      - hmg
+    types: [closed]
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  CreateRevertCandidate:
+  CreateRollback:
     if: |
-      github.event.issue.pull_request &&
-      contains(github.event.comment.html_url, '/pull/') &&
-      contains(github.event.comment.body, 'revert-hmg')
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.head.ref, 'rollback/') == false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v3
-        id: get-pr
-        with:
-          script: |
-            try {
-              const url = context.payload.comment.issue_url.replace('issues', 'pulls')
-              const { data } = await github.request(url)
-              return data
-            } catch (err) {
-              core.setFailed(`Request failed with error ${err}`)
-            }
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.PAT }}
-          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }} # or .head.ref for branch name
+          token: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN_CXM }}
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - name: Create Branch for Rollback
         uses: peterjgrainger/action-create-branch@v2.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN_CXM }}
         with:
-          branch: rollback/${{ fromJSON(steps.get-pr.outputs.result).number }}
+          branch: rollback/${{ github.event.pull_request.head.ref}}
 
       - name: Commit Rollback to branch
         run: |
           git config --global user.email "${GITHUB_ACTOR}"
           git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
-          git pull
-          git checkout rollback/${{ fromJSON(steps.get-pr.outputs.result).number }}
-          git reset HEAD^ --soft
-          git add .
-          git commit -m "Reseting changes"
-          git push -f
-
-      # create the PR-Rollback
-      - name: Create Rollback Pull Request
-        uses: repo-sync/pull-request@v2
-        with:
-          destination_branch: "hmg"
-          source_branch: rollback/${{ fromJSON(steps.get-pr.outputs.result).number }}
-          github_token: ${{ secrets.PAT }}
-          pr_label: rollback
-          pr_title: Rollback | ${{ fromJSON(steps.get-pr.outputs.result).title }}
-          pr_body: This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} in branch [${{ github.event.pull_request.head.ref }}]
+          git reset ${{ github.event.pull_request.merge_commit_sha }} --hard
+          git push -f origin HEAD:rollback/${{ github.event.pull_request.head.ref }}

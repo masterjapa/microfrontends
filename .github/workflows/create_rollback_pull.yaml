@@ -1,0 +1,41 @@
+name: Create HMG Flow
+
+# Start workflow
+on:
+  issue_comment:
+    types: [created]
+jobs:
+  CreateHMGCandidate:
+    if: |
+      github.event.issue.pull_request &&
+      contains(github.event.comment.html_url, '/pull/') &&
+      contains(github.event.comment.body, 'create-rollback')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        id: get-pr
+        with:
+          script: |
+            try {
+              const url = context.payload.comment.issue_url.replace('issues', 'pulls')
+              const result = await github.request(url)
+              return result.data
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }} # or .head.ref for branch name
+          fetch-depth: 0
+
+      # create the PR-Rollback
+      - name: Create Rollback Pull Request
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "hmg"
+          source_branch: rollback/hmg-${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
+          github_token: ${{ secrets.CREATE_FLOW_ACCESS_TOKEN_CXM }}
+          pr_label: rollback
+          pr_title: Rollback | ${{ fromJSON(steps.get-pr.outputs.result).title }}
+          pr_body: This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} in branch [${{ github.event.pull_request.head.ref }}](https://github.com/Tracksale/a2/tree/${{ github.event.pull_request.head.ref }}) and [pull request](https://github.com/Tracksale/a2/pulls/${{ github.event.number }})
