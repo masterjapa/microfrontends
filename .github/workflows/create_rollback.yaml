@@ -17,21 +17,16 @@ jobs:
         with:
           script: |
             try {
-              const baseUrl = context.payload.comment.issue_url.replace('issues', 'pulls')
-              const { data: pull } = await github.request(baseUrl)
-              const { data: commits } = await github.request(pull.commits_url)
-              console.log(commits, pull)
-              return {
-                pull,
-                commits
-              }
+              const url = context.payload.comment.issue_url.replace('issues', 'pulls')
+              const { data } = await github.request(url)
+              return data
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.PAT }}
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }} # or .head.ref for branch name
           fetch-depth: 0
 
       - name: Create Branch for Rollback
@@ -39,14 +34,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
-          branch: rollback/${{ github.event.number }}
+          branch: rollback/${{ fromJSON(steps.get-pr.outputs.result).number }}}
 
       - name: Commit Rollback to branch
         run: |
           git config --global user.email "${GITHUB_ACTOR}"
           git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
-          git revert -m 1 ${{ github.event.pull_request.merge_commit_sha }} --no-edit
-          git push -f origin HEAD:rollback/${{ github.event.number }}
+          git pull
+          git checkout rollback/${{ fromJSON(steps.get-pr.outputs.result).number }}}
+          git reset HEAD^ --soft
+          git add .
+          git commit -m "Reseting changes"
+          git push -f
 
       # create the PR-Rollback
       - name: Create Rollback Pull Request
