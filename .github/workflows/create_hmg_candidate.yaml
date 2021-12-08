@@ -34,21 +34,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
-          branch: hmg-${{ fromJSON(steps.get-pr.outputs.result).number }}
+          branch: hmg-${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
 
       - name: Commit To branch #aqui eu estou garantindo que num update a branch vai ser commitada de novo
         run: |
           git config --global user.email "${GITHUB_ACTOR}"
           git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
           git pull
-          git push -f origin HEAD:hmg-${{ fromJSON(steps.get-pr.outputs.result).number }}
+          git push -f origin HEAD:hmg-${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
 
       # create the PR-HMG
       - name: Create HMG Pull Request
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "hmg"
-          source_branch: hmg-${{ fromJSON(steps.get-pr.outputs.result).number }}
+          source_branch: hmg-${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
           github_token: ${{ secrets.PAT }}
           pr_label: hmg-candidate
           pr_title: HMG | ${{ fromJSON(steps.get-pr.outputs.result).title }}
