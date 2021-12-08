@@ -18,9 +18,9 @@ jobs:
           script: |
             try {
               const baseUrl = context.payload.comment.issue_url.replace('issues', 'pulls')
-              const pull = await github.request(baseUrl)
-              const commits = await github.request(pull.commits_url)
-              console.log(pull, commits)
+              const { data: pull } = await github.request(baseUrl)
+              const { data: commits } = await github.request(pull.commits_url)
+              console.log(commits, pull)
               return {
                 pull,
                 commits
