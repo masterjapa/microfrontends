@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v3
-        id: get-commits
+        id: get-pr
         with:
           script: |
             try {
@@ -34,14 +34,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
-          branch: rollback/${{ fromJSON(steps.get-pr.outputs.result).number }}}
+          branch: rollback/${{ fromJSON(steps.get-pr.outputs.result).number }}
 
       - name: Commit Rollback to branch
         run: |
           git config --global user.email "${GITHUB_ACTOR}"
           git config --global user.name "${GITHUB_ACTOR}@users.noreply.github.com"
           git pull
-          git checkout rollback/${{ fromJSON(steps.get-pr.outputs.result).number }}}
+          git checkout rollback/${{ fromJSON(steps.get-pr.outputs.result).number }}
           git reset HEAD^ --soft
           git add .
           git commit -m "Reseting changes"
@@ -52,8 +52,8 @@ jobs:
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "hmg"
-          source_branch: rollback/${{ github.event.number }}
+          source_branch: rollback/${{ fromJSON(steps.get-pr.outputs.result).number }}
           github_token: ${{ secrets.PAT }}
           pr_label: rollback
-          pr_title: Rollback | ${{ github.event.pull_request.title }}
+          pr_title: Rollback | ${{ fromJSON(steps.get-pr.outputs.result).title }}
           pr_body: This pull request will revert the changes made by @${{ github.event.pull_request.user.login }} in branch [${{ github.event.pull_request.head.ref }}]
