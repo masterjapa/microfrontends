@@ -1,11 +1,11 @@
-name: Create HMG Flow
+name: Create Rollback Pull Request
 
 # Start workflow
 on:
   issue_comment:
     types: [created]
 jobs:
-  CreateHMGCandidate:
+  CreateRollbackPullRequest:
     if: |
       github.event.issue.pull_request &&
       contains(github.event.comment.html_url, '/pull/') &&

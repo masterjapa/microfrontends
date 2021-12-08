@@ -61,6 +61,7 @@ export default {
         await this.fetchReactComponent();
       } catch (error) {
         console.error("eita testando", error);
+        console.error("eita testando", error);
       }
 
       this.updateReactComponent();
