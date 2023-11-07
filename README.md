@@ -29,9 +29,3 @@ yarn lint
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
-
-### simbora
-
-### testing CI v.42
-
-### testing rollback com alterações significativas

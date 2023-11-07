@@ -9,14 +9,14 @@ module.exports = {
         name: "shell",
         filename: "remoteEntry.js",
         remotes: {
-          core: "core@http://localhost:9001/remoteEntry.js",
-          reactComponents: "reactComponents@http://localhost:3002/remoteEntry.js",
+          Checkout: "Cart@http://localhost:9001/remoteEntry.js",
+          Shop: "Shop@http://localhost:3002/remoteEntry.js",
         },
         shared: require("./package.json").dependencies,
       }),
     ],
   },
   devServer: {
-    port: 8080
-  }
+    port: 8080,
+  },
 };

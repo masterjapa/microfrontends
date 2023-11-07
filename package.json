@@ -2,12 +2,16 @@
   "private": true,
   "scripts": {
     "ls": "lerna ls",
-    "start": "lerna run --scope @mf/* --parallel start:lerna",
-    "build": "lerna run --scope @mf/* build",
-    "serve": "lerna run --scope @mf/* --parallel serve",
-    "clean": "lerna run --scope @mf/* --parallel clean"
+    "start": "lerna run --scope \"@microfrontend/*\" --parallel start:lerna",
+    "build": "lerna run --scope \"@microfrontend/*\" build",
+    "serve": "lerna run --scope \"@microfrontend/*\" --parallel serve",
+    "clean": "lerna run --scope \"@microfrontend/*\" --parallel clean",
+    "install:lerna": "lerna run --scope \"@microfrontend/*\" --parallel install:lerna"
   },
   "devDependencies": {
-    "lerna": "^3.22.1"
-  }
+    "lerna": "^7.4.2"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

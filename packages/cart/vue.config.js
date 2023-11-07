@@ -6,10 +6,13 @@ module.exports = {
   configureWebpack: {
     plugins: [
       new ModuleFederationPlugin({
-        name: "core",
+        name: "Cart",
         filename: "remoteEntry.js",
         exposes: {
-          "./MainComponent": "./src/components/MainComponent",
+          "./ShoppingCart": "./src/components/ShoppingCart.vue",
+          "./addItem": "./src/stores",
+          "./removeItem": "./src/stores",
+          "./store": "./src/stores",
         },
         shared: require("./package.json").dependencies,
       }),

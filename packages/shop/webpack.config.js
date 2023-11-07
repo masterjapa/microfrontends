@@ -29,12 +29,13 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: "reactComponents",
+      name: "Shop",
       filename: "remoteEntry.js",
       exposes: {
         "./Button": "./src/Components/Button",
+        "./List": "./src/Components/List",
         "./ReactLoader": "./src/Loaders/React",
-        "./ReactDomLoader": "./src/Loaders/ReactDom"
+        "./ReactDomLoader": "./src/Loaders/ReactDom",
       },
       shared: {
         ...deps,

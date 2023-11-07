@@ -1,17 +1,15 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 
 export default ({ text = "Home Button", onClick }) => {
-  const onClickHandler = useCallback(() => {
+  const onClickHandler = () => {
     console.log(`Button.js: "${text}" clicked!`);
     onClick?.();
-  }, [text, onClick]);
+  };
 
   useEffect(() => {
     console.log("Button.js: mounted.");
     return () => console.log("Button.js: unmounted.");
   }, []);
-
-  console.log("Button.js: rendered.");
 
   return (
     <button

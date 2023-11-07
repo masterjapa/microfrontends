@@ -1576,9 +1576,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microfrontend/shell@workspace:.":
+"@microfrontend/cart@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@microfrontend/shell@workspace:."
+  resolution: "@microfrontend/cart@workspace:."
   dependencies:
     "@vue/cli-plugin-babel": 5.0.0-beta.3
     "@vue/cli-plugin-eslint": 4.5.13
@@ -1589,6 +1589,7 @@ __metadata:
     eslint-plugin-vue: 6.2.2
     vue: ^3.3.8
     vue-template-compiler: 2.6.14
+    vuex: ^4.1.0
     webpack: ^5.89.0
   languageName: unknown
   linkType: soft
@@ -2432,6 +2433,13 @@ __metadata:
     prettier:
       optional: true
   checksum: 70fee2289a4f54ec1be4d46136ee9b9893e31bf5622cead5be06c3dfb83449c3dbe6f8c03404625ccf302d0628ff9e2ea1debfae609d1bfe1d065d8f57c5dba8
+  languageName: node
+  linkType: hard
+
+"@vue/devtools-api@npm:^6.0.0-beta.11":
+  version: 6.5.1
+  resolution: "@vue/devtools-api@npm:6.5.1"
+  checksum: 3de9ff5ec78890c84d22c59910e26bf53140413895ba85b0e2a276609c24d9dde007cf468d9f21ef18389eaef75605fe94e79a761beb30d3bbb7af1ef19bbd4e
   languageName: node
   linkType: hard
 
@@ -12023,6 +12031,17 @@ __metadata:
     typescript:
       optional: true
   checksum: 560c18aa37f3f2351de8245f7844611409e7b7cbaabaae0993bdacd6090bb5ca81d89366e324babfdc7063f2312de5b62b56fe8b4dadc586baef8e0968eb6e14
+  languageName: node
+  linkType: hard
+
+"vuex@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "vuex@npm:4.1.0"
+  dependencies:
+    "@vue/devtools-api": ^6.0.0-beta.11
+  peerDependencies:
+    vue: ^3.2.0
+  checksum: f5e375a9c19ea3bbf4b9bc4c2adc033c37d2583e59b2d79da42bde2ab0771a086c419d62323fb354b6d421a8ddb4fd4e14f3abe5d49e9862311bc4847732b608
   languageName: node
   linkType: hard
 

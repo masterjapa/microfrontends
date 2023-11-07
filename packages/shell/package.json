@@ -1,16 +1,17 @@
 {
-  "name": "@mf/shell",
+  "name": "@microfrontend/shell",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start:lerna": "vue-cli-service serve"
+    "start:lerna": "vue-cli-service serve",
+    "install:lerna": "yarn install"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "core-js": "^3.33.2",
+    "vue": "^3.3.8"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "5.0.0-beta.3",
@@ -20,6 +21,6 @@
     "eslint": "7.32.0",
     "eslint-plugin-vue": "6.2.2",
     "vue-template-compiler": "2.6.14",
-    "webpack": "5.52.1"
+    "webpack": "^5.89.0"
   }
 }

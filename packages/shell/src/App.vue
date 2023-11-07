@@ -1,33 +1,40 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Este componente é do shell" />
-    <CoreMainComponent :msg="title" />
-    <div ref="react"></div>
+    <HelloWorld msg="This is a shell component" />
+
+    <div class="container">
+      <div class="container spaced" ref="react"></div>
+
+      <div class="container spaced">
+        <shopping-cart :customer="title" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
+import { defineAsyncComponent } from "vue";
 
 export default {
   name: "App",
   components: {
     HelloWorld,
-    CoreMainComponent: () => import("core/MainComponent"),
+    ShoppingCart: defineAsyncComponent(() => import("Checkout/ShoppingCart")),
   },
   data() {
     return {
-      title: "Vue microfrontend component renderizado via shell",
+      title: "Checkout",
     };
   },
   methods: {
     async fetchReactLoader() {
-      const reactLoader = await import("reactComponents/ReactLoader");
+      const reactLoader = await import("Shop/ReactLoader");
 
       this.createElement = reactLoader.default;
     },
     async fetchReactDomLoader() {
-      const reactDom = await import("reactComponents/ReactDomLoader");
+      const reactDom = await import("Shop/ReactDomLoader");
 
       const { render, unmountComponentAtNode } = reactDom.default;
 
@@ -35,16 +42,21 @@ export default {
       this.unmountComponentAtNode = unmountComponentAtNode;
     },
     async fetchReactComponent() {
-      const ReactComponent = await import("reactComponents/Button");
+      const ReactComponent = await import("Shop/List");
+      const CheckoutStore = await import("Checkout/store");
+
+      const { addItem, removeItem } = CheckoutStore;
 
       this.reactComponent = ReactComponent.default;
+      this.addItem = (item) => addItem(item);
+      this.removeItem = (item) => removeItem(item);
     },
     updateReactComponent() {
       if (!this.reactRender) return;
       this.reactRender(
         this.createElement(this.reactComponent, {
-          text: "Trocar o titulo",
-          onClick: () => (this.title = "Mudei o titulo via componente react"),
+          addItem: this.addItem,
+          removeItem: this.removeItem,
         }),
         this.$refs.react
       );
@@ -60,8 +72,7 @@ export default {
         await this.fetchReactDomLoader();
         await this.fetchReactComponent();
       } catch (error) {
-        console.error("eita testando", error);
-        console.error("eita testando", error);
+        console.error("Error loading the react app", error);
       }
 
       this.updateReactComponent();
@@ -84,5 +95,12 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.container {
+  display: flex;
+  flex: 1;
+}
+.spaced {
+  margin: 1rem;
 }
 </style>
